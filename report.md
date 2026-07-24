@@ -1,6 +1,6 @@
 # Tiny Second-hand Shopping Platform 개발 보고서
 
-과목: 소프트웨어개발실습 (시큐어코딩)
+과목: 시큐어코딩
 과제: Tiny Second-hand Shopping Platform
 작성자: 안유빈
 
@@ -8,7 +8,7 @@
 
 ## 1. 개요
 
-본 보고서는 강의자료 16~35p에서 제시된 소프트웨어 개발 주기(요구사항 도출 → 시스템 설계 → 시스템 구현 → 테스팅 → 유지보수)에 따라, 기본 제공된 저장소(`github.com/ugonfor/secure-coding`)의 중고거래 플랫폼(`Tiny Second-hand Shopping Platform`)에 누락된 기능을 추가하고, 코드 전반의 보안 취약점을 점검·수정한 과정을 정리한다.
+본 보고서는 강의자료에서 제시된 소프트웨어 개발 주기(요구사항 도출 → 시스템 설계 → 시스템 구현 → 테스팅 → 유지보수)에 따라, 기본 제공된 저장소(`github.com/ugonfor/secure-coding`)의 중고거래 플랫폼(`Tiny Second-hand Shopping Platform`)에 누락된 기능을 추가하고, 코드 전반의 보안 취약점을 점검·수정한 과정을 정리한다.
 
 ---
 
