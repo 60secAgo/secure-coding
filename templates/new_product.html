@@ -2,11 +2,13 @@
 {% block title %}새 상품 등록{% endblock %}
 {% block content %}
 <h2>상품 등록</h2>
-<form method="post">
-  제목: <input type="text" name="title" required><br>
+<form method="post" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  제목: <input type="text" name="title" maxlength="100" required><br>
   설명: <br>
-  <textarea name="description" rows="4" cols="50" required></textarea><br>
-  가격: <input type="text" name="price" required><br>
+  <textarea name="description" rows="4" maxlength="2000" required></textarea><br>
+  가격 (원, 정수): <input type="number" name="price" min="1" max="100000000" step="1" required><br>
+  상품 사진 (png/jpg/gif, 5MB 이하, 선택): <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif"><br>
   <button type="submit">등록하기</button>
 </form>
 {% endblock %}

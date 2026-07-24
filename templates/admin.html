@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}관리자 페이지{% endblock %}
+{% block content %}
+<h2>관리자 페이지</h2>
+
+<h3>사용자 관리</h3>
+<table>
+  <tr><th>사용자명</th><th>역할</th><th>상태</th><th>신고수</th><th>잔액</th><th>관리</th></tr>
+  {% for u in users %}
+  <tr>
+    <td>{{ u.username }}</td>
+    <td>{{ u.role }}</td>
+    <td><span class="badge {{ u.status }}">{{ u.status }}</span></td>
+    <td>{{ u.report_count }}</td>
+    <td>{{ u.balance }}</td>
+    <td>
+      {% if u.role != 'admin' %}
+      <form class="inline" method="post" action="{{ url_for('admin_update_user_status', user_id=u.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="status" value="active">
+        <button type="submit">활성화</button>
+      </form>
+      <form class="inline" method="post" action="{{ url_for('admin_update_user_status', user_id=u.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="status" value="dormant">
+        <button type="submit">휴면</button>
+      </form>
+      <form class="inline" method="post" action="{{ url_for('admin_update_user_status', user_id=u.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="status" value="banned">
+        <button class="danger" type="submit">차단</button>
+      </form>
+      {% else %}
+        -
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>상품 관리</h3>
+<table>
+  <tr><th>제목</th><th>가격</th><th>상태</th><th>신고수</th><th>관리</th></tr>
+  {% for p in products %}
+  <tr>
+    <td><a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a></td>
+    <td>{{ p.price }}</td>
+    <td><span class="badge {{ p.status }}">{{ p.status }}</span></td>
+    <td>{{ p.report_count }}</td>
+    <td>
+      <form class="inline" method="post" action="{{ url_for('admin_update_product_status', product_id=p.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="status" value="active">
+        <button type="submit">활성화</button>
+      </form>
+      <form class="inline" method="post" action="{{ url_for('admin_update_product_status', product_id=p.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="status" value="blocked">
+        <button class="danger" type="submit">차단</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>신고 내역 (최근 100건)</h3>
+<table>
+  <tr><th>신고자</th><th>유형</th><th>대상 ID</th><th>사유</th><th>일시</th><th>관리</th></tr>
+  {% for r in reports %}
+  <tr>
+    <td>{{ r.reporter_name }}</td>
+    <td>{{ r.target_type }}</td>
+    <td>{{ r.target_id }}</td>
+    <td>{{ r.reason }}</td>
+    <td>{{ r.created_at }}</td>
+    <td>
+      <form class="inline" method="post" action="{{ url_for('admin_delete_report', report_id=r.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="danger" type="submit">삭제</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

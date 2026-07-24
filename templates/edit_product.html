@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}상품 수정{% endblock %}
+{% block content %}
+<h2>상품 수정</h2>
+<form method="post" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  제목: <input type="text" name="title" maxlength="100" value="{{ product.title }}" required><br>
+  설명: <br>
+  <textarea name="description" rows="4" maxlength="2000" required>{{ product.description }}</textarea><br>
+  가격 (원, 정수): <input type="number" name="price" min="1" max="100000000" step="1" value="{{ product.price }}" required><br>
+  {% if product.image_filename %}
+    현재 사진:<br>
+    <img src="{{ url_for('static', filename='uploads/' + product.image_filename) }}" style="max-width:200px;"><br>
+  {% endif %}
+  새 사진으로 교체 (png/jpg/gif, 5MB 이하, 선택): <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif"><br>
+  <button type="submit">수정하기</button>
+</form>
+{% endblock %}

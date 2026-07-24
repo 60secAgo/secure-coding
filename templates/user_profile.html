@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.username }}님의 프로필{% endblock %}
+{% block content %}
+<h2>{{ profile_user.username }}님의 프로필
+  <span class="badge {{ profile_user.status }}">{{ profile_user.status }}</span>
+</h2>
+<p>소개글: {{ profile_user.bio or '(소개글이 없습니다.)' }}</p>
+
+{% if not is_me %}
+<p>
+  <a href="{{ url_for('chat_room', other_username=profile_user.username) }}">1:1 채팅하기</a>
+  &nbsp;|&nbsp;
+  <a href="{{ url_for('report', target_type='user', target_id=profile_user.id) }}">이 사용자 신고하기</a>
+</p>
+{% endif %}
+
+<h3>{{ profile_user.username }}님이 등록한 상품</h3>
+<ul>
+  {% for p in products %}
+    <li>
+      <a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a>
+      - {{ p.price }}원
+    </li>
+  {% else %}
+    <li>등록한 상품이 없습니다.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

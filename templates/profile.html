@@ -3,9 +3,48 @@
 {% block content %}
 <h2>프로필 관리</h2>
 <p>사용자명: {{ user.username }}</p>
+<p>잔액: {{ user.balance }}원</p>
+<p>계정 상태:
+  <span class="badge {{ user.status }}">{{ user.status }}</span>
+</p>
+
+<h3>소개글 수정</h3>
 <form method="post">
-  소개글: <br>
-  <textarea name="bio" rows="4" cols="50">{{ user.bio or '' }}</textarea><br>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="form_type" value="bio">
+  <textarea name="bio" rows="4" maxlength="500">{{ user.bio or '' }}</textarea><br>
   <button type="submit">프로필 업데이트</button>
 </form>
+
+<h3>비밀번호 변경</h3>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="form_type" value="password">
+  현재 비밀번호: <input type="password" name="current_password" maxlength="64" required><br>
+  새 비밀번호: <input type="password" name="new_password" minlength="8" maxlength="64" required><br>
+  새 비밀번호 확인: <input type="password" name="confirm_password" minlength="8" maxlength="64" required><br>
+  <button type="submit">비밀번호 변경</button>
+</form>
+
+<h3>내가 등록한 상품 관리</h3>
+<table>
+  <tr><th>상품명</th><th>가격</th><th>상태</th><th>관리</th></tr>
+  {% for p in my_products %}
+  <tr>
+    <td><a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a></td>
+    <td>{{ p.price }}원</td>
+    <td><span class="badge {{ p.status }}">{{ p.status }}</span></td>
+    <td>
+      <a href="{{ url_for('edit_product', product_id=p.id) }}">수정</a>
+      <form class="inline" method="post" action="{{ url_for('delete_product', product_id=p.id) }}"
+            onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="danger" type="submit">삭제</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="4">등록한 상품이 없습니다.</td></tr>
+  {% endfor %}
+</table>
 {% endblock %}

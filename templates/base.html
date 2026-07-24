@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}My Market{% endblock %}</title>
   <!-- Socket.IO 클라이언트 라이브러리 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -37,13 +38,14 @@
       font-weight: 600;
       margin-bottom: 20px;
     }
-    input, textarea, button {
+    input, textarea, button, select {
       width: 100%;
       padding: 10px;
       margin-bottom: 20px;
       border: 1px solid #e0e0e0;
       border-radius: 4px;
       font-size: 16px;
+      box-sizing: border-box;
     }
     button {
       background-color: #007AFF;
@@ -51,18 +53,16 @@
       border: none;
       cursor: pointer;
       transition: background-color 0.2s;
+      width: auto;
+      padding: 10px 20px;
     }
     button:hover {
       background-color: #005BB5;
     }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      padding: 10px;
-      border-bottom: 1px solid #e0e0e0;
-    }
+    button.danger { background-color: #D9534F; }
+    button.danger:hover { background-color: #B52B27; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 10px; border-bottom: 1px solid #e0e0e0; }
     .flash {
       background-color: #FFECB3;
       padding: 10px;
@@ -70,10 +70,22 @@
       border-radius: 4px;
       margin-bottom: 20px;
     }
-    /* 채팅 영역 스타일 */
-    #chat {
-      margin-top: 40px;
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-left: 8px;
     }
+    .badge.active { background: #D4EDDA; color: #155724; }
+    .badge.blocked, .badge.banned { background: #F8D7DA; color: #721C24; }
+    .badge.dormant { background: #FFF3CD; color: #856404; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; font-size: 14px; }
+    form.inline { display: inline-block; margin: 0; width: auto; }
+    form.inline button { padding: 4px 10px; margin: 0; font-size: 12px; }
+    /* 채팅 영역 스타일 */
+    #chat { margin-top: 40px; }
     #messages {
       height: 200px;
       overflow-y: auto;
@@ -90,7 +102,12 @@
     {% if session.get('user_id') %}
       <a href="{{ url_for('dashboard') }}">대시보드</a>
       <a href="{{ url_for('profile') }}">프로필</a>
+      <a href="{{ url_for('transfer') }}">송금</a>
       <a href="{{ url_for('report') }}">신고하기</a>
+      {% set me = current_user() %}
+      {% if me and me['role'] == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}">관리자</a>
+      {% endif %}
       <a href="{{ url_for('logout') }}">로그아웃</a>
     {% else %}
       <a href="{{ url_for('login') }}">로그인</a>
