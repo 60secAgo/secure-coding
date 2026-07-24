@@ -2,7 +2,7 @@
 
 과목: 소프트웨어개발실습 (시큐어코딩)
 과제: Tiny Second-hand Shopping Platform
-작성자: kolius@inu.ac.kr
+작성자: 안유빈
 
 ---
 
