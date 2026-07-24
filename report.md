@@ -2,7 +2,6 @@
 
 과목: 시큐어코딩
 과제: Tiny Second-hand Shopping Platform
-작성자: 안유빈
 
 ---
 
